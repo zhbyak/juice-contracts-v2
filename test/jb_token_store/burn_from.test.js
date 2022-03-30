@@ -155,6 +155,47 @@ describe('JBTokenStore::burnFrom(...)', function () {
       );
   });
 
+  it('Should burn unclaimed tokens and not claimed tokens, if amount > unclaimed token', async function () {
+    const { controller, newHolder, mockJbDirectory, jbTokenStore } = await setup();
+
+    await mockJbDirectory.mock.controllerOf.withArgs(PROJECT_ID).returns(controller.address);
+
+    await jbTokenStore.connect(controller).issueFor(PROJECT_ID, TOKEN_NAME, TOKEN_SYMBOL);
+
+    // Mint more claimed tokens
+    const preferClaimedTokens = true;
+    await jbTokenStore
+      .connect(controller)
+      .mintFor(newHolder.address, PROJECT_ID, MAX_TOKENS, preferClaimedTokens);
+
+    // Mint more unclaimed tokens
+    await jbTokenStore
+      .connect(controller)
+      .mintFor(newHolder.address, PROJECT_ID, MAX_TOKENS * BigInt(2), /* preferClaimedTokens= */ false);
+
+    // Burn all unclaimed tokens and then some of the claimed tokens. Leave 1 claimed token.
+    const burnAmt = MAX_TOKENS * BigInt(2) - BigInt(1);
+    const burnFromTx = await jbTokenStore
+      .connect(controller)
+      .burnFrom(newHolder.address, PROJECT_ID, burnAmt, /* preferClaimedTokens= */ false);
+
+    expect(await jbTokenStore.unclaimedBalanceOf(newHolder.address, PROJECT_ID)).to.equal(1);
+    expect(await jbTokenStore.balanceOf(newHolder.address, PROJECT_ID)).to.equal(MAX_TOKENS + BigInt(1));
+    expect(await jbTokenStore.totalSupplyOf(PROJECT_ID)).to.equal(MAX_TOKENS + BigInt(1));
+
+    await expect(burnFromTx)
+      .to.emit(jbTokenStore, 'Burn')
+      .withArgs(
+        newHolder.address,
+        PROJECT_ID,
+        burnAmt,
+        MAX_TOKENS * BigInt(2),
+        MAX_TOKENS,
+        /* preferClaimedTokens= */ false,
+        controller.address,
+      );
+  });
+
   it('Should burn only unclaimed tokens and emit event', async function () {
     const { controller, newHolder, mockJbDirectory, jbTokenStore } = await setup();
 
