@@ -41,3 +41,5 @@ INFURA_ID= eth 链特有,去 infura 上获取
 5.npx hardhat deploy --network bsctestnet   
 6.最后验证npx hardhat --network bsctestnet etherscan-verify
 ```
+
+bsctest记录:https://testnet.bscscan.com/address/0x95C54D662c31672b2E9C572959AcF93cc883a0A5
