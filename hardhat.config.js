@@ -26,6 +26,8 @@ function mnemonic() {
 
 const infuraId = process.env.INFURA_ID;
 
+console.log(`infura id ${infuraId}`)
+
 module.exports = {
   defaultNetwork,
   networks: {
@@ -42,6 +44,13 @@ module.exports = {
     },
     mainnet: {
       url: 'https://mainnet.infura.io/v3/' + infuraId,
+      gasPrice: 50000000000,
+      accounts: {
+        mnemonic: mnemonic(),
+      },
+    },
+    bsctestnet: {
+      url: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
       gasPrice: 50000000000,
       accounts: {
         mnemonic: mnemonic(),

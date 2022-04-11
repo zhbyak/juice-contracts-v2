@@ -8,6 +8,8 @@ const { ethers } = require('hardhat');
  * npx hardhat deploy --network rinkeby
  */
 module.exports = async ({ deployments, getChainId }) => {
+  console.log('Start deploy.js');
+
   const { deploy } = deployments;
   const [deployer] = await ethers.getSigners();
 
@@ -40,6 +42,12 @@ module.exports = async ({ deployments, getChainId }) => {
     // hardhat / localhost
     case '31337':
       multisigAddress = deployer.address;
+      protocolProjectStartsAtOrAfter = 0;
+      break;
+    // bsc
+    case '97':
+      multisigAddress = '0x95C54D662c31672b2E9C572959AcF93cc883a0A5';
+      chainlinkV2UsdEthPriceFeed = '0x2514895c72f50D8bd4B4F9b1110F0D6bD2c97526';
       protocolProjectStartsAtOrAfter = 0;
       break;
   }
