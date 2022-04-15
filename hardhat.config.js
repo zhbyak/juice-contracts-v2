@@ -56,6 +56,13 @@ module.exports = {
         mnemonic: mnemonic(),
       },
     },
+    mumbai: {
+      url: 'https://rpc-mumbai.matic.today',
+      gasPrice: 20000000000,
+      accounts: {
+        mnemonic: mnemonic(),
+      },
+    },
   },
   namedAccounts: {
     deployer: {

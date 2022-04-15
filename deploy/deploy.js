@@ -50,6 +50,12 @@ module.exports = async ({ deployments, getChainId }) => {
       chainlinkV2UsdEthPriceFeed = '0x2514895c72f50D8bd4B4F9b1110F0D6bD2c97526';
       protocolProjectStartsAtOrAfter = 0;
       break;
+    // mumbai/Polygon
+    case '80001':
+      multisigAddress = '0x95C54D662c31672b2E9C572959AcF93cc883a0A5';
+      chainlinkV2UsdEthPriceFeed = '0xd0D5e3DB44DE05E9F294BB0a3bEEaF030DE24Ada';
+      protocolProjectStartsAtOrAfter = 0;
+      break;
   }
 
   console.log({ multisigAddress, protocolProjectStartsAtOrAfter });
